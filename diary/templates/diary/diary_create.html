@@ -1,0 +1,10 @@
+{% extends 'diary/base.html' %}
+{% block meta_title %}新規投稿{% endblock %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">投稿</button>
+</form>
+{% endblock %}
