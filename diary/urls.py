@@ -13,4 +13,6 @@ urlpatterns = [
     path('note/<int:pk>/', views.DiaryNote.as_view(), name='note'),
     path('create/', views.DiaryCreateView.as_view(), name='diary_create'),
     path('create/complete/', views.DiaryCreateCompleteView.as_view(), name='diary_create_complete'),
+    path('delete/<int:diary_id>/', views.DiaryDelete, name='delete'),
+    path('add/', views.DiaryAdd, name='add-note'),
 ]

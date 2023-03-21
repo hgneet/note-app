@@ -5,11 +5,16 @@
   padding: 0;
 }
 
+html {
+  height: 100%;
+}
+
 body {
   line-height: 1;
   font-family: "Noto Sans JP", sans-serif;
   font-size: 14px;
   font-weight: 300;
+  height: 100%;
 }
 
 a {
@@ -22,10 +27,12 @@ a:hover {
 
 /* ヘッダー */
 
-#site-header {
+header {
   padding: 5px 0;
   text-align: center;
   background-color: #333333;
+  height: 35px;
+  color: white;
 }
 
 p#title {
@@ -39,14 +46,16 @@ main {
   flex-direction: row;
   background-color:#1e2838;
   flex-grow: 1;
+  height: calc(100% - 35px);
+  overflow: auto;
 }
 
 /* サイドメニュー */
 
 .side {
   background-color:#333333;
-  width: 4%;
-  /* text-align:center; */
+  width: 80px;
+  height: 100%;
 }
 
 .nav-link {
@@ -58,18 +67,18 @@ main {
   color: white;
 }
 
-.note-area{
+.note-area {
   flex-grow: 1;
   color: white;
 }
 
 #diary-list {
-  width: 20%;
+  width: 350px;
   padding: 0 8px;
   grid-template-columns: 1fr 1fr 1fr;
   overflow-y: scroll;
   border: 1px solid #1e1e1e;
-  height: 100vh;
+  height: 100%;
 }
 
 /* スクロールバー */
@@ -89,9 +98,7 @@ main {
 
 .diary {
   background-color: rgba(147, 147, 147, 0.197);
-  /* padding: 5px; */
   box-sizing: border-box;
-  text-align: center;
   margin: 8px 0;
   width: 100%;
 }
@@ -107,15 +114,17 @@ main {
   transition-duration: 0.1s;
 }
 
+a#diary-link{
+  padding: 0.8em;
+}
+
 .diary-title {
-  margin-bottom: 16px;
-  font-size: 22px;
+  font-size: 24px;
   color: #fff;
   font-weight: 400;
 }
 
 .meta {
-  margin-bottom: 32px;
   color: #fff;
   font-size: 6px;
 }
@@ -123,24 +132,96 @@ main {
 .contents > p {
   color: #fff;
   margin-bottom: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .text-left {
   text-align: left;
 }
 
-/* .backを追加 */
-.section-title, .back {
-  font-weight: 300;
-  font-size: 16px;
-  padding: 16px 0;
+/* note wrap */
+.note-wrap {
+  width: 100%;
+  margin: 10px 10px;
 }
 
-nav#page {
-  margin-top: -16px;
-  margin-bottom: 16px;
+form {
+  height: 100%;
+  display:flex;
+  flex-flow: column;
 }
 
-nav#page > * {
-  margin-right: 20px;
+/* setting container */
+.setting-container {
+  display: flex;
+  flex-basis: 40px;
+}
+
+.diary-delete-button {
+  margin: auto 15px;
+}
+
+.diary-bookmark-button {
+  margin: auto 15px;
+}
+
+.btn-form {
+  margin-left: auto
+}
+
+
+/* edit container  */
+.edit-container {
+  width: 85%;
+  flex-grow: 1;
+  margin: auto;
+  text-align:  center;
+  display:flex;
+  flex-flow: column;
+}
+
+.input-title {
+  font-size: 32px;
+  width: 100%;
+  height: 100%;
+  background-color:  #1e2838;
+  color: white;
+  border: none;
+  outline: 0;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.form-title {
+  text-align:  center;
+}
+
+.form-category{
+  margin-top: 10px;
+  text-align: left;
+}
+
+.input-text {
+  width: 100%;
+  height: 100%;
+  background-color:  #1e2838;
+  color: white;
+}
+
+.form-textarea {
+  margin-top: 10px;
+  text-align:  center;
+  flex-grow: 1;
+}
+.input-text {
+  padding: 10px;
+}
+
+textarea::-webkit-resizer {
+  background-color: #333333;
+}
+
+.note-list-comment {
+  color: white;
 }

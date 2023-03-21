@@ -3,7 +3,8 @@ from django.http import Http404
 from django.utils import timezone
 from django.urls import reverse_lazy
 from django.db.models import Q
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
+from django.views.decorators.http import require_POST
 
 from .forms import DiarySearchForm, DiaryCreateForm
 
@@ -18,8 +19,16 @@ class ArchiveListMixin:
     allow_empty = True
     make_object_list = True
 
+    
+class DiaryListMixin(generic.base.ContextMixin):
 
-class DiaryList(ArchiveListMixin, generic.ArchiveIndexView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['diary_list'] = Diary.objects.all().order_by('created_at').reverse()
+        return context
+    
+    
+class DiaryList(DiaryListMixin, ArchiveListMixin, generic.ArchiveIndexView):
 
     def get_queryset(self):
         return super().get_queryset().select_related('category')
@@ -28,26 +37,15 @@ class DiaryList(ArchiveListMixin, generic.ArchiveIndexView):
         context = super().get_context_data(**kwargs)
         context['heading'] = '最近の日記'
         return context
+
+
     
-
-# class DiaryDetail(generic.DetailView):
-#     model = Diary
-
-#     def get_object(self, queryset=None):
-#         diary = super().get_object()
-#         if diary.created_at <= timezone.now():
-#             return diary
-#         raise Http404
-class DiaryDetail(request, pk):
+class DiaryDetail(DiaryListMixin, generic.UpdateView):
     template_name = 'diary/diary_detail.html'
     model = Diary
+    success_url = reverse_lazy('diary:diary_create_complete')
+    form_class = DiaryCreateForm
 
-    def get_object(self, queryset=None):
-        diary = super().get_object()
-        if diary.created_at <= timezone.now():
-            return diary
-        raise Http404
-    
 
 class DiaryCategoryList(ArchiveListMixin, generic.ArchiveIndexView):
 
@@ -120,3 +118,16 @@ class DiaryCreateView(generic.CreateView):
 
 class DiaryCreateCompleteView(generic.TemplateView):
     template_name = 'diary/diary_create_complete.html'
+
+# @require_POST
+def DiaryDelete(request, diary_id):
+    diary_pk = get_object_or_404(Diary, pk=diary_id)
+    diary_pk.delete()
+    return redirect('diary:list')
+
+# @require_POST
+def DiaryAdd(request):
+    category = Category.objects.get(pk=1)
+    Diary.objects.create(title='新規作成', category=category)
+    return redirect('diary:list')
+   

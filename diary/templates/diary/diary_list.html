@@ -1,50 +1,36 @@
 {% extends 'diary/base.html' %}
 {% load diary_tag %}
 
-{% block meta_title %}{{ heading }} - {{ block.super }}{% endblock %}
+{% block meta_title %}{{ diary.title }} Noteリスト {{ block.super }}{% endblock %}
 
 {% block content %}
-    <div id="diary-list" class="note-list flex-column">
+<div id="diary-list" class="note-list flex-column">
 
-        {% for diary in object_list %}
+    {% for diary in diary_list %}
 
-            <article class="diary">
-                <a href="{% url 'diary:detail' diary.pk %}">
-                    <h2 class="diary-title">{{ diary.title }}</h2>
-                    <p class="meta">
-                        <time datetime="{{ diary.created_at | date:'Y-m-d' }}">{{ diary.created_at | date:'Y年n月j日' }}</time>
-                        -
-                        {{ diary.category }}
+        <article class="diary">
+            <a href="{% url 'diary:detail' diary.pk %}" id="diary-link">
+                <h2 class="diary-title">{{ diary.title }}</h2>
+                <p class="meta">
+                    <time datetime="{{ diary.created_at | date:'Y-m-d' }}">{{ diary.created_at | date:'Y年n月j日' }}</time>
+                    -
+                    {{ diary.category }}
+                </p>
+                <div class="contents">
+                    <p>
+                        {{ diary.text | truncatechars:100 }}
                     </p>
-                    <div class="contents">
-                        <p>
-                            {{ diary.text | truncatechars:100 }}
-                        </p>
-                    </div>
-                </a>
-            </article>
+                </div>
+            </a>
+        </article>
 
-        {% empty %}
-            <p>記事が見つかりませんでした。</p>
-        {% endfor %}
 
-        <nav id="page">
-            <!-- 1つ前 の部分 -->
-            {% if page_obj.has_previous %}
-                <a id="prev" href="?{% url_replace request 'page' page_obj.previous_page_number %}" title="前ページへ">前ページ</a>
-            {% endif %}
+    {% empty %}
+        <p>記事が見つかりませんでした。</p>
+    {% endfor %}
 
-            <span id="page-info">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
-
-            <!-- 1つ後 の部分 -->
-            {% if page_obj.has_next %}
-                <a id="next" href="?{% url_replace request 'page' page_obj.next_page_number %}" title="次ページへ">次ページ</a>
-            {% endif %}
-        </nav>
-
-    </div>
-    <div class="note-area">
-        <p>記事を選択してください</p>
-    </div>
-
+</div>
+<div class="note-wrap">
+    <div class="note-list-comment">noteを指定してください。</div>
+</div>
 {% endblock %}
